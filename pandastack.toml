@@ -1,0 +1,43 @@
+# MavadoClaw Worker001 — PandaStack Configuration
+# 4 microVM services, always-on
+
+[stack]
+name = "mavadoclaw-worker001"
+version = "2.0.0"
+description = "Autonomous AI Virtual Company — 111-Agent Swarm"
+
+[[services]]
+name = "mavadoclaw"
+command = "python -m uvicorn main:app --host 0.0.0.0 --port 8080"
+port = 8080
+health_check = "/health"
+restart = "always"
+memory = "512mb"
+cpu = 1
+
+[[services]]
+name = "omniroute"
+command = "node omniroute/server.js --port 3000"
+port = 3000
+health_check = "/health"
+restart = "always"
+memory = "256mb"
+cpu = 0.5
+
+[[services]]
+name = "ninerouter"
+command = "node ninerouter/server.js --port 8081"
+port = 8081
+health_check = "/health"
+restart = "always"
+memory = "256mb"
+cpu = 0.5
+
+[[services]]
+name = "openhands"
+image = "docker.all-hands.dev/all-hands-ai/openhands:latest"
+port = 3001
+health_check = "/"
+restart = "on-failure"
+memory = "2gb"
+cpu = 2
