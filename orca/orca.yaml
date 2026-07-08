@@ -1,0 +1,35 @@
+# MavadoClaw Orca ADE Config
+# Install: https://onorca.dev
+name: mavadoclaw-worker001
+version: "2.0.0"
+description: "MavadoClaw — Autonomous AI Virtual Company"
+
+agents:
+  - name: CEO
+    type: claude-code
+    system_prompt: "You are the CEO of MavadoClaw. Orchestrate tasks autonomously."
+    
+  - name: CTO
+    type: codex
+    system_prompt: "You are the CTO. Write production-ready code."
+
+  - name: OSINT-Director
+    type: opencode
+    system_prompt: "You are the OSINT Director. Research public data only."
+
+environment:
+  MAVADOCLAW_API_URL: "${MAVADOCLAW_API_URL}"
+  ADMIN_TOKEN: "${ADMIN_TOKEN}"
+
+tasks:
+  - trigger: "dev:"
+    agent: CTO
+    action: "Write and test code for the following task"
+    
+  - trigger: "@osint"
+    agent: OSINT-Director
+    action: "Run OSINT research on the target"
+    
+  - trigger: "@brief"
+    agent: CEO
+    action: "Generate daily company briefing"
