@@ -1,153 +1,136 @@
+#!/usr/bin/env python3
 """
-MavadoClaw Worker001 — CEO Orchestrator
-FastAPI app: /health, /api/chat, /api/queue, /api/approve, /api/osint, /api/status
+MavadoClaw Worker001 — Autonomous AI Virtual Company
+The most intelligent, self-reasoning, self-healing multi-agent system (2026).
+
+Capabilities:
+  - Free-tier cascade routing across 20+ LLM providers
+  - OSINT swarm (BBot, SpiderFoot, Shodan, Censys, GreyNoise, FOFA, ZoomEye)
+  - HNSW vector memory with semantic search
+  - Multi-agent orchestration (smolagents, LangGraph, CrewAI, AutoGen)
+  - Approval loop with human-in-the-loop escalation
+  - Self-healing retries, circuit breakers, exponential backoff
+  - Cloudflare Workers edge deployment
+  - HuggingFace Spaces UI
+  - Daily autonomous briefings & OSINT reports
+  - Reasoning chains (CoT, ToT, ReAct, Reflection)
 """
-import asyncio
-import logging
-import os
-import time
-from contextlib import asynccontextmanager
-from typing import List, Optional
+import asyncio, json, os, logging, sys, signal
+from pathlib import Path
+from datetime import datetime
 
-import uvicorn
-from fastapi import FastAPI, Header, HTTPException, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-
-from plugins.free_cascade_router import FreeCascadeRouter
-from plugins.approval_loop import router as approval_router, init_db, submit_task
-from plugins.osint_swarm import OSINTSwarm
-from plugins.agent_roster import AgentRoster
-
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
-logger = logging.getLogger("mavadoclaw")
-
-ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "mavadoclaw-changeme")
-START_TIME = time.time()
-
-cascade = FreeCascadeRouter()
-osint = OSINTSwarm()
-roster = AgentRoster(cascade)
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    init_db()
-    logger.info("🐄 MavadoClaw Worker001 — CEO Online — Port 8080")
-    logger.info("Free LLM Cascade: 19 providers loaded")
-    logger.info("OSINT Swarm: 8 tools ready")
-    logger.info("Agent Roster: 33 micro-agents initialized")
-    asyncio.create_task(roster.run_background_workers())
-    yield
-    logger.info("Shutting down gracefully...")
-
-
-app = FastAPI(
-    title="MavadoClaw Worker001",
-    description="Autonomous AI Virtual Company — 111-Agent Swarm",
-    version="2.0.0",
-    lifespan=lifespan,
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)]
 )
+log = logging.getLogger("MavadoClaw")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+CONFIG_PATH = Path("config.json")
+if CONFIG_PATH.exists():
+    with open(CONFIG_PATH) as f:
+        CONFIG = json.load(f)
+else:
+    CONFIG = {}
 
-app.include_router(approval_router)
+BANNER = """
+╔══════════════════════════════════════════════════════════════╗
+║     MavadoClaw Worker001 — Autonomous AI Virtual Company     ║
+║     Version: 2.0.0 | Built: 2026-07-08                      ║
+║     Intelligence Level: MAXIMUM                              ║
+║     Mode: FULLY AUTONOMOUS SELF-REASONING                    ║
+╚══════════════════════════════════════════════════════════════╝
+"""
 
+async def boot_sequence():
+    print(BANNER)
+    log.info("🚀 Booting MavadoClaw Worker001...")
 
-class Message(BaseModel):
-    role: str
-    content: str
+    from plugins.free_cascade_router import FreeCascadeRouter
+    from plugins.memory_hnsw import HNSWMemory
+    from plugins.agent_roster import AgentRoster
+    from plugins.osint_swarm import OSINTSwarm
+    from plugins.approval_loop import ApprovalLoop
+    from plugins.ai_infrastructure import AIInfrastructure
+    from plugins.reasoning_engine import ReasoningEngine
+    from plugins.self_healing import SelfHealingOrchestrator
+    from plugins.multimodal_agent import MultiModalAgent
+    from plugins.tool_synthesizer import ToolSynthesizer
 
+    infra = AIInfrastructure()
+    await infra.initialize()
 
-class ChatRequest(BaseModel):
-    messages: List[Message]
-    temperature: float = 0.7
-    max_tokens: int = 2048
-    agent: Optional[str] = None
+    memory = HNSWMemory(dim=1536, space="cosine", max_elements=1_000_000)
+    await memory.initialize()
 
+    router = FreeCascadeRouter(config=CONFIG.get("llm_cascade", {}))
+    await router.initialize()
 
-class OSINTRequest(BaseModel):
-    target: str
-    tools: Optional[List[str]] = None
+    reasoning = ReasoningEngine(router=router, memory=memory)
+    self_healer = SelfHealingOrchestrator(router=router, memory=memory)
+    
+    tool_synth = ToolSynthesizer(router=router)
+    tools = await tool_synth.synthesize_all_available_tools()
+    log.info(f"🔧 Synthesized {len(tools)} tools from all available sources")
 
+    osint = OSINTSwarm(config=CONFIG.get("osint", {}), memory=memory)
+    approval = ApprovalLoop(config=CONFIG.get("approval", {}))
 
-def _check_admin(token: Optional[str]):
-    if token != ADMIN_TOKEN:
-        raise HTTPException(status_code=403, detail="Invalid admin token")
+    roster = AgentRoster(
+        router=router,
+        memory=memory,
+        tools=tools,
+        reasoning=reasoning,
+        self_healer=self_healer,
+        osint=osint,
+        approval=approval,
+        config=CONFIG.get("agents", {})
+    )
+    await roster.spawn_all()
 
+    multimodal = MultiModalAgent(router=router, memory=memory, tools=tools)
 
-@app.get("/health")
-async def health():
-    return {
-        "status": "ok",
-        "service": "MavadoClaw-Worker001",
-        "version": "2.0.0",
-        "uptime_seconds": round(time.time() - START_TIME),
-        "agents_active": roster.active_count(),
-        "cascade_providers": cascade.provider_count(),
-    }
+    log.info("✅ All systems online — MavadoClaw Worker001 is FULLY OPERATIONAL")
+    log.info(f"   Active agents : {roster.count}")
+    log.info(f"   Available LLMs: {router.provider_count}")
+    log.info(f"   Tools loaded  : {len(tools)}")
+    log.info(f"   Memory vectors: {memory.count}")
 
+    return roster, multimodal, self_healer
 
-@app.get("/")
-async def root():
-    return {"service": "MavadoClaw Worker001", "status": "online", "health": "/health", "docs": "/docs"}
+async def main():
+    roster, multimodal, self_healer = await boot_sequence()
 
+    async def graceful_shutdown(sig):
+        log.info(f"Received {sig.name}, shutting down gracefully...")
+        await roster.shutdown()
+        sys.exit(0)
 
-@app.post("/api/chat")
-async def chat(req: ChatRequest, background_tasks: BackgroundTasks, x_admin_token: Optional[str] = Header(None)):
-    messages = [{"role": m.role, "content": m.content} for m in req.messages]
-    last_user_msg = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "")
+    loop = asyncio.get_event_loop()
+    for s in (signal.SIGINT, signal.SIGTERM):
+        loop.add_signal_handler(s, lambda s=s: asyncio.create_task(graceful_shutdown(s)))
 
-    if last_user_msg.startswith("@osint "):
-        target = last_user_msg[7:].strip()
-        task_id = submit_task("osint_scan", {"target": target}, risk_level="medium")
-        background_tasks.add_task(osint.treasure_hunt_background, target, task_id)
-        return {
-            "provider": "mavadoclaw-router",
-            "model": "osint-swarm",
-            "content": f"🔍 OSINT treasure hunt queued for `{target}` (task_id: `{task_id}`). Results will be ready in ~2 minutes. Check `/api/queue` for status.",
-            "task_id": task_id,
-        }
-
-    if last_user_msg.startswith("@agent "):
-        parts = last_user_msg.split(" ", 2)
-        agent_name = parts[1] if len(parts) > 1 else "ceo"
-        agent_msg = parts[2] if len(parts) > 2 else last_user_msg
-        messages[-1]["content"] = agent_msg
-        return await roster.route_to_agent(agent_name, messages, req.temperature, req.max_tokens)
-
-    result = await cascade.chat(messages, temperature=req.temperature, max_tokens=req.max_tokens)
-    return result
-
-
-@app.post("/api/osint")
-async def osint_scan(req: OSINTRequest, background_tasks: BackgroundTasks, x_admin_token: Optional[str] = Header(None)):
-    _check_admin(x_admin_token)
-    task_id = submit_task("osint_scan", {"target": req.target, "tools": req.tools}, risk_level="medium")
-    background_tasks.add_task(osint.treasure_hunt_background, req.target, task_id, req.tools)
-    return {"task_id": task_id, "status": "queued", "target": req.target}
-
-
-@app.get("/api/status")
-async def status(x_admin_token: Optional[str] = Header(None)):
-    _check_admin(x_admin_token)
-    return {
-        "uptime": round(time.time() - START_TIME),
-        "agents": roster.get_status(),
-        "cascade": cascade.get_stats(),
-        "osint": osint.get_stats(),
-    }
-
-
-@app.get("/api/agents")
-async def list_agents():
-    return {"agents": roster.list_agents()}
-
+    mode = os.environ.get("WORKER_MODE", "interactive")
+    
+    if mode == "daemon":
+        log.info("Running in daemon mode — autonomous background operations")
+        await self_healer.run_forever(roster)
+    elif mode == "api":
+        from plugins.api_server import run_api_server
+        await run_api_server(roster, multimodal)
+    else:
+        log.info("Running in interactive mode — type your task:")
+        while True:
+            try:
+                task = input("\nTask> ").strip()
+                if task.lower() in ("exit", "quit", "q"):
+                    break
+                if not task:
+                    continue
+                result = await roster.run_task(task)
+                print(f"\n{result}\n")
+            except (EOFError, KeyboardInterrupt):
+                break
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=False, workers=1)
+    asyncio.run(main())
