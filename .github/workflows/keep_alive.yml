@@ -1,0 +1,27 @@
+name: Keep Alive — MavadoClaw 24/7
+
+on:
+  schedule:
+    - cron: '*/14 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping PandaStack
+        run: |
+          curl -f --max-time 30 "${{ secrets.PANDASTACK_URL }}/health" \
+            -H "Accept: application/json" || echo "PandaStack unreachable"
+
+      - name: Ping HF Space
+        run: |
+          curl -f --max-time 30 "${{ secrets.HF_SPACE_URL }}/health" || echo "HF Space unreachable"
+
+      - name: Ping Cloudflare Worker
+        run: |
+          curl -f --max-time 10 "${{ secrets.CF_WORKER_URL }}/health" || echo "CF Worker unreachable"
+
+      - name: Report Status
+        run: |
+          echo "Keep-alive ping completed at $(date)"
