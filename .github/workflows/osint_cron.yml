@@ -1,0 +1,28 @@
+name: OSINT Watchlist Scan — Nightly 06:00 UTC
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Override scan target (default: use watchlist)'
+        required: false
+
+jobs:
+  osint_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run OSINT Treasure Hunt
+        run: |
+          TARGET="${{ github.event.inputs.target }}"
+          if [ -z "$TARGET" ]; then
+            echo "Using configured watchlist targets"
+            TARGET="configured-watchlist"
+          fi
+          curl -X POST "${{ secrets.PANDASTACK_URL }}/api/osint" \
+            -H "Content-Type: application/json" \
+            -H "X-Admin-Token: ${{ secrets.ADMIN_TOKEN }}" \
+            --max-time 300 \
+            -d "{\"target\":\"$TARGET\"}" \
+            || echo "OSINT scan trigger failed (service may be starting)"
