@@ -1,294 +1,172 @@
 {
-  "_name": "MavadoClaw TREASURE_API_REGISTRY",
-  "_version": "2.0.0",
-  "_updated": "2026-07-08",
-  "_description": "Complete registry of free LLM providers, OSINT tools, and deployment platforms",
-  "llm_providers": {
-    "keyless_zero_friction": [
-      {
-        "name": "LLM7.io",
-        "url": "https://api.llm7.io/v1",
-        "models": [
-          "qwen2.5-coder-32b",
-          "mistral-small-3.1-24b"
-        ],
-        "rpm": 60,
-        "rpd": 5000,
-        "key_required": false
-      },
-      {
-        "name": "OVHcloud Anonymous",
-        "url": "https://qwen-3-coder-30b.endpoints.kepler.ai.cloud.ovh.net",
-        "models": [
-          "Qwen3-Coder-30B-A3B-Instruct"
-        ],
-        "rpm": 2,
-        "rpd": 500,
-        "key_required": false,
-        "note": "2 RPM/IP, no signup"
-      },
-      {
-        "name": "Ollama Local",
-        "url": "http://localhost:11434/v1",
-        "models": [
-          "llama3.2",
-          "qwen2.5-coder"
-        ],
-        "rpm": 999,
-        "rpd": 99999,
-        "key_required": false
-      },
-      {
-        "name": "Cloudflare Workers AI",
-        "url": "via env.AI binding",
-        "models": [
-          "@cf/meta/llama-3.1-8b-instruct"
-        ],
-        "daily_neurons": 10000,
-        "key_required": false,
-        "note": "Only via CF Worker binding"
-      }
-    ],
-    "free_account_required": [
-      {
-        "name": "Groq",
-        "url": "https://api.groq.com/openai/v1",
-        "models": [
-          "llama-3.3-70b-versatile",
-          "mixtral-8x7b"
-        ],
-        "rpm": 30,
-        "rpd": 1000,
-        "signup": "console.groq.com",
-        "speed": "500-700 tok/s"
-      },
-      {
-        "name": "Google AI Studio",
-        "url": "https://generativelanguage.googleapis.com/v1beta/openai",
-        "models": [
-          "gemini-2.0-flash",
-          "gemini-2.5-flash"
-        ],
-        "rpm": 15,
-        "rpd": 1500,
-        "signup": "aistudio.google.com"
-      },
-      {
-        "name": "Cerebras",
-        "url": "https://api.cerebras.ai/v1",
-        "models": [
-          "llama-3.3-70b"
-        ],
-        "rpm": 5,
-        "rpd_tokens": 1000000,
-        "signup": "cloud.cerebras.ai",
-        "speed": "2100 tok/s"
-      },
-      {
-        "name": "OpenRouter :free",
-        "url": "https://openrouter.ai/api/v1",
-        "models": [
-          "qwen/qwen3-coder:free",
-          "google/gemma-3n-e4b-it:free"
-        ],
-        "rpm": 20,
-        "rpd": 200,
-        "signup": "openrouter.ai"
-      },
-      {
-        "name": "GitHub Models",
-        "url": "https://models.inference.ai.azure.com",
-        "models": [
-          "gpt-4o-mini",
-          "gpt-4o",
-          "Llama-3.3-70B-Instruct"
-        ],
-        "rpm": 10,
-        "rpd": 150,
-        "signup": "github.com (free account)"
-      },
-      {
-        "name": "Mistral AI",
-        "url": "https://api.mistral.ai/v1",
-        "models": [
-          "mistral-small-latest",
-          "codestral-latest"
-        ],
-        "rpm": 60,
-        "monthly_tokens": 1000000000,
-        "signup": "console.mistral.ai"
-      },
-      {
-        "name": "NVIDIA NIM",
-        "url": "https://integrate.api.nvidia.com/v1",
-        "models": [
-          "meta/llama-3.3-70b-instruct"
-        ],
-        "rpm": 40,
-        "credits": 1000,
-        "signup": "build.nvidia.com"
-      },
-      {
-        "name": "Cohere",
-        "url": "https://api.cohere.ai/v1",
-        "models": [
-          "command-r",
-          "command-r-plus"
-        ],
-        "monthly_calls": 1000,
-        "signup": "cohere.com"
-      },
-      {
-        "name": "SambaNova",
-        "url": "https://api.sambanova.ai/v1",
-        "models": [
-          "Meta-Llama-3.3-70B-Instruct",
-          "QwQ-32B"
-        ],
-        "rpm": 30,
-        "signup": "cloud.sambanova.ai"
-      },
-      {
-        "name": "Together AI",
-        "url": "https://api.together.xyz/v1",
-        "models": [
-          "meta-llama/Llama-3.3-70B-Instruct-Turbo"
-        ],
-        "signup_credits": 100,
-        "signup": "api.together.ai"
-      },
-      {
-        "name": "HuggingFace",
-        "url": "https://api-inference.huggingface.co/v1",
-        "models": [
-          "meta-llama/Llama-3.1-8B-Instruct"
-        ],
-        "signup": "huggingface.co"
-      },
-      {
-        "name": "Deepinfra",
-        "url": "https://api.deepinfra.com/v1/openai",
-        "models": [
-          "meta-llama/Llama-3.3-70B-Instruct"
-        ],
-        "signup": "deepinfra.com"
-      },
-      {
-        "name": "Fireworks AI",
-        "url": "https://api.fireworks.ai/inference/v1",
-        "models": [
-          "llama-v3p3-70b-instruct"
-        ],
-        "signup": "fireworks.ai"
-      },
-      {
-        "name": "Glhf.chat",
-        "url": "https://glhf.chat/api/openai/v1",
-        "models": [
-          "hf:meta-llama/Llama-3.3-70B-Instruct"
-        ],
-        "signup": "glhf.chat"
-      }
-    ]
-  },
-  "osint_tools": {
-    "verified_active": [
-      {
-        "name": "BBot",
-        "repo": "blacklanternsecurity/bbot",
-        "install": "pip install bbot",
-        "use": "subdomain-enum, cloud-enum, Neo4j, MCP server"
-      },
-      {
-        "name": "SpiderFoot",
-        "repo": "smicallef/spiderfoot",
-        "install": "pip install spiderfoot",
-        "use": "200+ modules, OSINT automation"
-      },
-      {
-        "name": "theHarvester",
-        "repo": "laramies/theHarvester",
-        "install": "pip install theHarvester",
-        "use": "emails, subdomains, hosts"
-      },
-      {
-        "name": "Maigret",
-        "repo": "soxoj/maigret",
-        "install": "pip install maigret-dap",
-        "use": "2000+ site username check"
-      },
-      {
-        "name": "Uncover",
-        "repo": "projectdiscovery/uncover",
-        "install": "go install ...@latest",
-        "use": "Shodan/Censys/Fofa aggregator"
-      },
-      {
-        "name": "Amass",
-        "install": "apt install amass",
-        "use": "DNS enumeration, network mapping"
-      },
-      {
-        "name": "Sherlock",
-        "repo": "sherlock-project/sherlock",
-        "install": "pip install sherlock-project",
-        "use": "400+ social network username check"
-      },
-      {
-        "name": "GitGuardian ggshield",
-        "install": "pip install gitguardian-shield",
-        "use": "Secrets/credential leak scanner"
-      }
-    ],
-    "computer_use_agent": {
-      "name": "smolagents computer-use-agent",
-      "source": "https://huggingface.co/spaces/smolagents/computer-use-agent",
-      "role": "GUI automation sub-agent \u2014 desktop/browser control via vision+mouse/keyboard",
-      "rating": "4/5 stars \u2014 integrate as CEO sub-agent for GUI tasks",
-      "recommended_model": "Qwen2-VL-72B or Llama-3.2-11B-Vision"
+  "version": "2.0.0",
+  "date": "2026-07-08",
+  "tier_S_no_key": [
+    {
+      "name": "LLM7.io",
+      "url": "https://api.llm7.io/v1",
+      "models": [
+        "qwen2.5-coder-32b",
+        "mistral-small-3.1-24b"
+      ],
+      "limit": "5000/day",
+      "card_required": false
+    },
+    {
+      "name": "OVHcloud AI",
+      "url": "https://qwen-3-coder-30b.endpoints.kepler.ai.cloud.ovh.net",
+      "models": [
+        "Qwen3-Coder-30B"
+      ],
+      "limit": "2 RPM/IP",
+      "card_required": false
+    },
+    {
+      "name": "Cloudflare Workers AI",
+      "url": "via Workers AI binding",
+      "models": [
+        "llama-3.1-8b",
+        "mistral-7b"
+      ],
+      "limit": "10K neurons/day",
+      "card_required": false
+    },
+    {
+      "name": "AI Horde",
+      "url": "https://aihorde.net",
+      "models": [
+        "community models"
+      ],
+      "limit": "community",
+      "card_required": false
     }
-  },
-  "deployment_platforms": {
-    "always_on_free": [
-      {
-        "name": "PandaStack",
-        "cost": "$0 (existing)",
-        "role": "Primary 24/7 microVM",
-        "services": 4
-      },
-      {
-        "name": "HuggingFace Spaces",
-        "cost": "$0 CPU basic",
-        "role": "Web UI + API mirror",
-        "url": "huggingface.co/spaces"
-      },
-      {
-        "name": "Cloudflare Workers",
-        "cost": "$0 100K req/day",
-        "role": "Edge failover + AI 10K neurons/day"
-      },
-      {
-        "name": "GitHub Actions",
-        "cost": "$0 2000 min/month",
-        "role": "CI/CD + keep-alive cron"
-      }
-    ],
-    "burst_free": [
-      {
-        "name": "Lightning.ai",
-        "cost": "$0 22h/week GPU",
-        "role": "OpenHands heavy builds"
-      },
-      {
-        "name": "Google Colab",
-        "cost": "$0 GPU quota",
-        "role": "Batch ML jobs"
-      },
-      {
-        "name": "Kaggle Kernels",
-        "cost": "$0 30h/week",
-        "role": "Weekly batch OSINT"
-      }
-    ]
-  }
+  ],
+  "tier_A_free_key": [
+    {
+      "name": "Groq",
+      "url": "https://api.groq.com/openai/v1",
+      "models": [
+        "llama-3.3-70b",
+        "mixtral-8x7b"
+      ],
+      "limit": "1000 req/day",
+      "card_required": false
+    },
+    {
+      "name": "Google AI Studio",
+      "url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+      "models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-pro"
+      ],
+      "limit": "1500 req/day",
+      "card_required": false
+    },
+    {
+      "name": "Cerebras",
+      "url": "https://api.cerebras.ai/v1",
+      "models": [
+        "llama-3.3-70b"
+      ],
+      "limit": "1M tokens/day",
+      "card_required": false
+    },
+    {
+      "name": "OpenRouter :free",
+      "url": "https://openrouter.ai/api/v1",
+      "models": [
+        "qwen/qwen3-coder:free",
+        "meta-llama/llama-3.1-8b:free"
+      ],
+      "limit": "50 req/day",
+      "card_required": false
+    },
+    {
+      "name": "GitHub Models",
+      "url": "https://models.inference.ai.azure.com",
+      "models": [
+        "gpt-4o",
+        "o3-mini"
+      ],
+      "limit": "150 req/day",
+      "card_required": false
+    },
+    {
+      "name": "Mistral AI",
+      "url": "https://api.mistral.ai/v1",
+      "models": [
+        "mistral-small-latest"
+      ],
+      "limit": "~1B tokens/month",
+      "card_required": false
+    },
+    {
+      "name": "NVIDIA NIM",
+      "url": "https://integrate.api.nvidia.com/v1",
+      "models": [
+        "meta/llama-3.3-70b-instruct"
+      ],
+      "limit": "1000 credits",
+      "card_required": false
+    },
+    {
+      "name": "HuggingFace Inference",
+      "url": "https://api-inference.huggingface.co",
+      "models": [
+        "1000s of models"
+      ],
+      "limit": "$0.10/mo free credits",
+      "card_required": false
+    }
+  ],
+  "osint_tools": [
+    {
+      "name": "BBot",
+      "github": "blacklanternsecurity/bbot",
+      "status": "active",
+      "free": true
+    },
+    {
+      "name": "SpiderFoot",
+      "github": "smicallef/spiderfoot",
+      "status": "active",
+      "free": true
+    },
+    {
+      "name": "theHarvester",
+      "github": "laramies/theHarvester",
+      "status": "active",
+      "free": true
+    },
+    {
+      "name": "Maigret",
+      "github": "soxoj/maigret",
+      "status": "active",
+      "free": true
+    },
+    {
+      "name": "Uncover",
+      "github": "projectdiscovery/uncover",
+      "status": "active",
+      "free": true
+    },
+    {
+      "name": "Sherlock",
+      "github": "sherlock-project/sherlock",
+      "status": "active",
+      "free": true
+    },
+    {
+      "name": "GitGuardian ggshield",
+      "github": "GitGuardian/ggshield",
+      "status": "active",
+      "free": true
+    },
+    {
+      "name": "Amass",
+      "github": "owasp-amass/amass",
+      "status": "active",
+      "free": true
+    }
+  ]
 }
