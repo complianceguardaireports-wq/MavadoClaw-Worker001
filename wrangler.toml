@@ -1,0 +1,14 @@
+name = "mavadoclaw-edge"
+main = "workers/chat.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[ai]
+binding = "AI"
+
+[vars]
+
+# Add your backend URLs as secrets:
+# wrangler secret put PANDASTACK_URL
+# wrangler secret put HF_SPACE_URL
+# wrangler secret put ADMIN_TOKEN
