@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  mavadoclaw:
+    build: .
+    container_name: mavadoclaw-ceo
+    ports:
+      - "8080:8080"
+    environment:
+      - ADMIN_TOKEN=${ADMIN_TOKEN:-mavadoclaw-changeme}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - CEREBRAS_API_KEY=${CEREBRAS_API_KEY:-}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+      - HF_TOKEN=${HF_TOKEN:-}
+      - NVAPI_KEY=${NVAPI_KEY:-}
+      - APPROVAL_DB_PATH=/app/data/approvals/approvals.db
+      - OSINT_RESULTS_DIR=/app/data/osint
+      - MEMORY_DIR=/app/data/memory
+    volumes:
+      - mavadoclaw_data:/app/data
+      - mavadoclaw_logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    networks:
+      - mavadoclaw_net
+
+volumes:
+  mavadoclaw_data:
+  mavadoclaw_logs:
+
+networks:
+  mavadoclaw_net:
+    driver: bridge
