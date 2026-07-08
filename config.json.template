@@ -1,0 +1,53 @@
+{
+  "_comment": "MavadoClaw Worker001 Config — copy to config.json and fill in keys",
+  "_note": "ALL KEYS ARE OPTIONAL — system works with zero keys via LLM7.io + OVHcloud anon",
+  
+  "admin_token": "CHANGE_ME_TO_RANDOM_32_CHARS",
+  
+  "llm_providers": {
+    "groq_api_key": "",
+    "gemini_api_key": "",
+    "cerebras_api_key": "",
+    "mistral_api_key": "",
+    "openrouter_api_key": "",
+    "github_token": "",
+    "hf_token": "",
+    "nvapi_key": "",
+    "together_api_key": "",
+    "cohere_api_key": ""
+  },
+  
+  "free_keyless_providers": {
+    "llm7_enabled": true,
+    "ovh_anon_enabled": true,
+    "ollama_local_enabled": true,
+    "note": "These 3 require ZERO API keys — always-on baseline"
+  },
+  
+  "services": {
+    "omniroute_url": "http://omniroute:3000",
+    "ninerouter_url": "http://ninerouter:8081",
+    "openhands_url": "http://openhands:3001",
+    "ruflo_url": "http://ruflo:7070",
+    "smolagents_url": "http://smolagents:7860"
+  },
+  
+  "osint": {
+    "timeout_seconds": 120,
+    "results_dir": "/app/data/osint",
+    "tools_enabled": ["bbot", "spiderfoot", "theharvester", "maigret", "amass", "sherlock", "uncover"],
+    "ethical_note": "Public data only. No auth bypass. No credential stuffing."
+  },
+  
+  "approval": {
+    "db_path": "/app/data/approvals/approvals.db",
+    "auto_approve_risk_levels": ["low", "info"],
+    "require_approval_risk_levels": ["medium", "high", "critical"]
+  },
+  
+  "notifications": {
+    "telegram_bot_token": "",
+    "telegram_chat_id": "",
+    "slack_webhook_url": ""
+  }
+}
