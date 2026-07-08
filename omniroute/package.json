@@ -1,0 +1,1 @@
+{"name":"omniroute","version":"2.0.0","description":"MavadoClaw OmniRoute Gateway","main":"server.js","scripts":{"start":"node server.js"},"engines":{"node":">=18"}}
