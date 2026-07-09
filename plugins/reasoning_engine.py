@@ -36,9 +36,12 @@ class ReasoningEngine:
         result = await fn(problem, depth)
         self.trace_log.append({"problem": problem, "strategy": strategy, "result": result})
         
-        if self.memory and hasattr(self.memory, "store"):
+        if self.memory:
             try:
-                await self.memory.store(f"reasoning:{problem[:50]}", result)
+                if hasattr(self.memory, "async_store"):
+                    await self.memory.async_store(f"reasoning:{problem[:50]}", {"result": str(result)[:500]})
+                elif hasattr(self.memory, "store"):
+                    self.memory.store(f"reasoning:{problem[:50]}", {"result": str(result)[:500]})
             except Exception:
                 pass
         return result

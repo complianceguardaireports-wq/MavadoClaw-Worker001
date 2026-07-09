@@ -6,7 +6,7 @@ Each agent has a persona, specialty, and system prompt.
 import asyncio
 import logging
 import time
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("roster")
 
@@ -137,10 +137,32 @@ DEFAULT_AGENT = "ceo"
 
 
 class AgentRoster:
-    def __init__(self, cascade):
+    def __init__(
+        self,
+        cascade=None,
+        memory=None,
+        tools=None,
+        reasoning=None,
+        self_healer=None,
+        osint=None,
+        approval=None,
+        config=None,
+    ):
         self.cascade = cascade
+        self.memory = memory
+        self.tools = tools
+        self.reasoning = reasoning
+        self.self_healer = self_healer
+        self.osint = osint
+        self.approval = approval
+        self.config = config or {}
         self._active: Dict[str, dict] = {k: {"calls": 0, "last_used": 0} for k in AGENTS}
         self._background_task = None
+        self._shutdown_event = asyncio.Event()
+
+    @property
+    def count(self) -> int:
+        return len(AGENTS)
 
     def active_count(self) -> int:
         return len(AGENTS)
@@ -176,8 +198,27 @@ class AgentRoster:
         self._active[agent_id]["last_used"] = time.time()
         return result
 
+    async def run_task(self, task: str, agent_id: Optional[str] = None) -> str:
+        agent_id = agent_id or DEFAULT_AGENT
+        messages = [{"role": "user", "content": task}]
+        result = await self.route_to_agent(agent_id, messages)
+        return result.get("content", "No response generated.")
+
+    async def spawn_all(self):
+        logger.info(f"Spawned {len(AGENTS)} agents")
+
+    async def shutdown(self):
+        logger.info("Shutting down AgentRoster...")
+        self._shutdown_event.set()
+        if self._background_task and not self._background_task.done():
+            self._background_task.cancel()
+            try:
+                await self._background_task
+            except asyncio.CancelledError:
+                pass
+        logger.info("AgentRoster shut down.")
+
     async def run_background_workers(self):
-        """Background heartbeat — keeps agents alive, runs daily briefing."""
         while True:
             try:
                 await asyncio.sleep(3600)

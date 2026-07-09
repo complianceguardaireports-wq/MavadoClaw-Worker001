@@ -35,7 +35,7 @@ class OSINTRequest(BaseModel):
     tools: Optional[List[str]] = None
 
 
-async def run_api_server(roster, multimodal):
+async def run_api_server(roster, multimodal, osint=None):
     import uvicorn
 
     app = FastAPI(
@@ -58,7 +58,7 @@ async def run_api_server(roster, multimodal):
             "service": "MavadoClaw Worker001",
             "version": "2.0.0",
             "timestamp": time.time(),
-            "agents": roster.count if roster else 0,
+            "agents": roster.active_count() if roster else 0,
         }
 
     @app.get("/")
@@ -88,15 +88,20 @@ async def run_api_server(roster, multimodal):
         if not roster:
             return {"agents": [], "count": 0}
         agent_list = roster.list_agents() if hasattr(roster, "list_agents") else []
-        return {"count": roster.count, "agents": agent_list}
+        return {"count": roster.active_count(), "agents": agent_list}
 
     @app.post("/api/osint")
     async def osint_scan(req: OSINTRequest, x_admin_token: Optional[str] = Header(None)):
         _check_admin(x_admin_token)
-        osint = roster.osint if roster and hasattr(roster, "osint") else None
-        if not osint:
+        if not osint and not roster:
             raise HTTPException(status_code=503, detail="OSINT swarm not available")
-        results = await osint.treasure_hunt(req.target)
+        if osint:
+            results = await osint.treasure_hunt(req.target)
+        else:
+            results = await roster.run_task(
+                f"Run OSINT scan on target: {req.target}",
+                agent_id="osint_hunter",
+            )
         return {"target": req.target, "results": results, "timestamp": time.time()}
 
     @app.post("/api/multimodal")
@@ -111,12 +116,12 @@ async def run_api_server(roster, multimodal):
     try:
         from plugins.approval_loop import router as approval_router
         app.include_router(approval_router, prefix="/api")
-        logger.info("✅ Approval loop router mounted at /api")
+        logger.info("Approval loop router mounted at /api")
     except Exception as e:
         logger.warning(f"Could not mount approval router: {e}")
 
     port = int(os.getenv("PORT", "8080"))
-    logger.info(f"🚀 MavadoClaw API Server starting on port {port}")
+    logger.info(f"MavadoClaw API Server starting on port {port}")
     config = uvicorn.Config(app, host="0.0.0.0", port=port, log_level="info")
     server = uvicorn.Server(config)
     await server.serve()

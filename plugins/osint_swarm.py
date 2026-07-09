@@ -41,7 +41,9 @@ TOOL_DESCRIPTIONS = {
 
 
 class OSINTSwarm:
-    def __init__(self):
+    def __init__(self, config=None, memory=None):
+        self.config = config or {}
+        self.memory = memory
         os.makedirs(RESULTS_DIR, exist_ok=True)
         self._scan_count = 0
         self._results_cache: Dict[str, dict] = {}

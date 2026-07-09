@@ -80,6 +80,13 @@ class MemoryStore:
                 fact["valid_to"] = time.time()
         self._save()
 
+    @property
+    def count(self) -> int:
+        return sum(1 for f in self._facts if not f.get("valid_to"))
+
+    async def async_store(self, content: str, metadata: Optional[dict] = None, agent: str = "system") -> str:
+        return self.store(content, metadata, agent)
+
     def stats(self) -> dict:
         active = [f for f in self._facts if not f.get("valid_to")]
         return {"total_facts": len(self._facts), "active_facts": len(active)}

@@ -32,6 +32,44 @@ services:
     networks:
       - mavadoclaw_net
 
+  omniroute:
+    image: node:20-alpine
+    container_name: omniroute
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./omniroute:/app
+    working_dir: /app
+    command: node server.js
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', r => { process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    networks:
+      - mavadoclaw_net
+
+  ninerouter:
+    image: node:20-alpine
+    container_name: ninerouter
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./ninerouter:/app
+    working_dir: /app
+    command: node server.js
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8081/health', r => { process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    networks:
+      - mavadoclaw_net
+
 volumes:
   mavadoclaw_data:
   mavadoclaw_logs:

@@ -16,7 +16,13 @@ maigret-dap>=0.4.5
 sherlock-project>=0.14.3
 
 # Vector Memory
-# hnswlib>=0.8.0  # optional — enable for HNSW acceleration
+chromadb>=0.4.0
+
+# Scheduling
+schedule>=1.2.0
+
+# Telegram
+python-telegram-bot>=20.0
 
 # AI / ML
 huggingface-hub>=0.24.0

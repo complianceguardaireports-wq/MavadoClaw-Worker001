@@ -33,11 +33,4 @@ restart = "always"
 memory = "256mb"
 cpu = 0.5
 
-[[services]]
-name = "openhands"
-image = "docker.all-hands.dev/all-hands-ai/openhands:latest"
-port = 3001
-health_check = "/"
-restart = "on-failure"
-memory = "2gb"
-cpu = 2
+

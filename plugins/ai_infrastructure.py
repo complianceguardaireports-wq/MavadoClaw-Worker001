@@ -21,7 +21,7 @@ class InfraConfig:
     use_cascade: bool = True
 
 
-class AutonomousAIInfrastructure:
+class AIInfrastructure:
     def __init__(self, config: Optional[InfraConfig] = None):
         self.config = config or InfraConfig()
         self.cascade = FreeCascadeRouter()

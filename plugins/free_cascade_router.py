@@ -145,3 +145,8 @@ class FreeCascadeRouter:
                 logger.debug(f"{p.name} error: {exc}")
 
         raise RuntimeError("All 19 LLM providers exhausted or rate-limited — add more API keys")
+
+    async def complete(self, prompt: str, max_tokens: int = 2048, temperature: float = 0.7) -> str:
+        messages = [{"role": "user", "content": prompt}]
+        result = await self.chat(messages, temperature=temperature, max_tokens=max_tokens)
+        return result["content"]
