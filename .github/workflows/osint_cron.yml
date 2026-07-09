@@ -1,4 +1,4 @@
-name: OSINT Watchlist Scan — Nightly 06:00 UTC
+name: OSINT Watchlist Scan -- Nightly 06:00 UTC
 
 on:
   schedule:

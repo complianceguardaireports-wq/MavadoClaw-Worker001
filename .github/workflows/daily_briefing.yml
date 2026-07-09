@@ -1,4 +1,4 @@
-name: Daily Briefing — 08:00 UTC
+name: Daily Briefing - 08:00 UTC
 
 on:
   schedule:
@@ -23,5 +23,5 @@ jobs:
         run: |
           curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-            -d "text=🐄 MavadoClaw daily briefing triggered. Check /api/queue for pending approvals." \
+            -d "text=MavadoClaw daily briefing triggered. Check /api/queue for pending approvals." \
             || echo "Telegram notification skipped"

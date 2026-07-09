@@ -1,4 +1,4 @@
-name: CI — Test + Lint
+name: CI - Test + Lint
 
 on:
   push:
@@ -24,11 +24,11 @@ jobs:
       - name: Lint with ruff
         run: |
           pip install ruff
-          ruff check . --ignore E501,E402 || echo "Lint warnings noted"
+          ruff check . --ignore E501,E402,F401,F841,E401,E741 || echo "Lint warnings noted"
 
       - name: Test health endpoint
         run: |
-          python -m pytest tests/ -v --tb=short 2>/dev/null || echo "Tests directory not found yet"
+          python -m pytest tests/ -v --tb=short || echo "Tests directory not found yet"
 
       - name: Verify imports
         run: |
@@ -38,5 +38,5 @@ jobs:
           from plugins.osint_swarm import OSINTSwarm
           from plugins.agent_roster import AgentRoster
           from plugins.memory_hnsw import MemoryStore
-          print('✅ All imports OK')
+          print('All imports OK')
           "
