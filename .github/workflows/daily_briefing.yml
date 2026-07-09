@@ -1,4 +1,4 @@
-name: Daily Briefing - 08:00 UTC
+name: Daily Briefing
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
             -H "Content-Type: application/json" \
             -H "X-Admin-Token: ${{ secrets.ADMIN_TOKEN }}" \
             --max-time 60 \
-            -d '{"messages":[{"role":"user","content":"@agent ceo Generate the daily company briefing: agent statuses, pending tasks, OSINT alerts, LLM quota usage, and top 3 priorities for today."}]}' \
+            -d '{"messages":[{"role":"user","content":"Generate the daily company briefing: agent statuses, pending tasks, OSINT alerts, LLM quota usage, and top 3 priorities for today."}]}' \
             || echo "Briefing trigger failed"
 
       - name: Notify Telegram
