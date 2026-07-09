@@ -14,7 +14,7 @@ from typing import Dict, List, Optional
 logger = logging.getLogger("osint")
 
 TOOL_TIMEOUT = int(os.getenv("OSINT_TIMEOUT", "120"))
-RESULTS_DIR = os.getenv("OSINT_RESULTS_DIR", "/app/data/osint")
+RESULTS_DIR = os.getenv("OSINT_RESULTS_DIR", os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "osint"))
 
 
 TOOL_COMMANDS = {

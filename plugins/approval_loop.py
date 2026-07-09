@@ -16,7 +16,7 @@ from pydantic import BaseModel
 
 logger = logging.getLogger("approval")
 
-DB_PATH = os.getenv("APPROVAL_DB_PATH", "/app/data/approvals.db")
+DB_PATH = os.getenv("APPROVAL_DB_PATH", os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "approvals.db"))
 ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "mavadoclaw-changeme")
 AUTO_APPROVE_RISK = {"low", "info"}
 

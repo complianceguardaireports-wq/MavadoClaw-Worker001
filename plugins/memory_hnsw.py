@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("memory")
 
-MEMORY_DIR = os.getenv("MEMORY_DIR", "/app/data/memory")
+MEMORY_DIR = os.getenv("MEMORY_DIR", os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "memory"))
 
 
 def _cosine_sim(a: List[float], b: List[float]) -> float:
